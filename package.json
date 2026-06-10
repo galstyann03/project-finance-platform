@@ -1,0 +1,21 @@
+{
+  "name": "project-finance-platform",
+  "version": "1.0.0",
+  "description": "GraphQL API to manage projects, invitations, and project finances (Apollo Server + Prisma + MySQL)",
+  "main": "dist/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "graphql",
+    "apollo-server",
+    "prisma",
+    "mysql",
+    "express",
+    "typescript",
+    "jwt"
+  ],
+  "author": "Narek Galstyan",
+  "license": "ISC",
+  "type": "commonjs"
+}
