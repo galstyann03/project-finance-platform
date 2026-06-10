@@ -1,0 +1,33 @@
+export const authTypeDefs = `#graphql
+  type User {
+    id: ID!
+    email: String!
+    name: String
+    createdAt: String!
+  }
+
+  type AuthPayload {
+    token: String!
+    user: User!
+  }
+
+  input RegisterInput {
+    email: String!
+    password: String!
+    name: String
+  }
+
+  input LoginInput {
+    email: String!
+    password: String!
+  }
+
+  extend type Query {
+    me: User
+  }
+
+  extend type Mutation {
+    register(input: RegisterInput!): AuthPayload!
+    login(input: LoginInput!): AuthPayload!
+  }
+`;
