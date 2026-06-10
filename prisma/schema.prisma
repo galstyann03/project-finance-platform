@@ -1,0 +1,94 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  ownedProjects     Project[]    @relation("ProjectOwner")
+  sentInvitations   Invitation[] @relation("InvitationInviter")
+  receivedInvites   Invitation[] @relation("InvitationInvitee")
+  expenses          Expense[]
+  incomes           Income[]
+}
+
+model Project {
+  id        Int      @id @default(autoincrement())
+  name      String
+  location  String
+  ownerId   Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  owner       User         @relation("ProjectOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  invitations Invitation[]
+  expenses    Expense[]
+  incomes     Income[]
+
+  @@index([ownerId])
+}
+
+enum InvitationStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+model Invitation {
+  id        Int              @id @default(autoincrement())
+  projectId Int
+  inviteeId Int
+  inviterId Int
+  status    InvitationStatus @default(PENDING)
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  invitee User    @relation("InvitationInvitee", fields: [inviteeId], references: [id], onDelete: Cascade)
+  inviter User    @relation("InvitationInviter", fields: [inviterId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, inviteeId])
+  @@index([inviteeId])
+}
+
+model Expense {
+  id        Int      @id @default(autoincrement())
+  projectId Int
+  name      String
+  amount    Decimal  @db.Decimal(12, 2)
+  creatorId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  creator User    @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@index([projectId, name])
+}
+
+model Income {
+  id        Int      @id @default(autoincrement())
+  projectId Int
+  name      String
+  amount    Decimal  @db.Decimal(12, 2)
+  creatorId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  creator User    @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@index([projectId, name])
+}
