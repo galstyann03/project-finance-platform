@@ -144,6 +144,25 @@ migrations, and resets the tables between tests. Covered areas:
 
 ---
 
+## Frontend (client)
+
+A minimal React app in `client/` that exercises the API: register/login, list & create
+projects, invite members, and accept/reject invitations.
+
+**Stack:** Vite + React + TypeScript, Apollo Client, MUI v7, React Hook Form + Yup.
+
+```bash
+cd client
+npm install
+npm run dev          # http://localhost:5173
+```
+
+The backend API must be running on http://localhost:4000 first (see above). The app
+stores the JWT in `localStorage` and an Apollo auth link attaches it as
+`Authorization: Bearer <token>` on every request.
+
+---
+
 ## Project structure
 
 Layered architecture (a resolver plays the role of a REST controller):

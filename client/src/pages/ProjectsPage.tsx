@@ -76,14 +76,22 @@ export function ProjectsPage({ onLogout }: { onLogout: () => void }) {
     },
   });
 
+  const [actionErr, setActionErr] = useState<string | null>(null);
+
   const [accept] = useMutation(ACCEPT_INVITATION, {
+    onError: (e) => setActionErr(e.message),
     onCompleted: () => {
+      setActionErr(null);
       invitations.refetch();
       refetch();
     },
   });
   const [reject] = useMutation(REJECT_INVITATION, {
-    onCompleted: () => invitations.refetch(),
+    onError: (e) => setActionErr(e.message),
+    onCompleted: () => {
+      setActionErr(null);
+      invitations.refetch();
+    },
   });
 
   const onSubmit = (values: FormValues) =>
@@ -189,6 +197,11 @@ export function ProjectsPage({ onLogout }: { onLogout: () => void }) {
         <Typography variant="h6" gutterBottom>
           My invitations
         </Typography>
+        {actionErr && (
+          <Alert severity="error" sx={{ mb: 2 }}>
+            {actionErr}
+          </Alert>
+        )}
         {invitations.data?.myInvitations?.length === 0 && (
           <Typography color="text.secondary" sx={{ mb: 3 }}>
             No invitations.
@@ -203,6 +216,7 @@ export function ProjectsPage({ onLogout }: { onLogout: () => void }) {
                 inv.status === "PENDING" && (
                   <Stack direction="row" spacing={1}>
                     <Button
+                      type="button"
                       size="small"
                       variant="contained"
                       onClick={() => accept({ variables: { id: inv.id } })}
@@ -210,6 +224,7 @@ export function ProjectsPage({ onLogout }: { onLogout: () => void }) {
                       Accept
                     </Button>
                     <Button
+                      type="button"
                       size="small"
                       color="error"
                       onClick={() => reject({ variables: { id: inv.id } })}
