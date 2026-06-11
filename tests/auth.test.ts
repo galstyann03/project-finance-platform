@@ -50,7 +50,7 @@ describe("Authentication", () => {
   });
 
   it("blocks a protected operation without a token", async () => {
-    const res = await run(server, PROJECTS); // user = null
+    const res = await run(server, PROJECTS);
     expect(res.errors?.[0].extensions?.code).toBe("UNAUTHENTICATED");
   });
 });

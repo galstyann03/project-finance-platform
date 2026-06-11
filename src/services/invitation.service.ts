@@ -12,7 +12,6 @@ export class InvitationService {
   ) {}
 
   async invite(ownerId: number, projectId: number, email: string) {
-    // 1. Only the project owner may invite.
     const project = await this.projectRepository.findById(projectId);
     if (!project) throw notFound("Project not found");
     if (project.ownerId !== ownerId) {
