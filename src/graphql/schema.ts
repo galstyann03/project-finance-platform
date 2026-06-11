@@ -6,6 +6,8 @@ import { invitationTypeDefs } from "./typeDefs/invitation.js";
 import { invitationResolvers } from "./resolvers/invitation.js";
 import { financeTypeDefs } from "./typeDefs/finance.js";
 import { financeResolvers } from "./resolvers/finance.js";
+import { reportTypeDefs } from "./typeDefs/report.js";
+import { reportResolvers } from "./resolvers/report.js";
 
 const baseTypeDefs = `#graphql
   type Query {
@@ -29,6 +31,7 @@ export const typeDefs = [
   projectTypeDefs,
   invitationTypeDefs,
   financeTypeDefs,
+  reportTypeDefs,
 ];
 export const resolvers = [
   baseResolvers,
@@ -36,4 +39,5 @@ export const resolvers = [
   projectResolvers,
   invitationResolvers,
   financeResolvers,
+  reportResolvers,
 ];
