@@ -9,14 +9,13 @@ export async function createApp() {
   const app = express();
 
   const apollo = new ApolloServer<GraphQLContext>({ typeDefs, resolvers });
-  await apollo.start(); // must finish before mounting the middleware
+  await apollo.start();
 
   app.use(
     "/graphql",
     cors(),
     express.json(),
     expressMiddleware(apollo, {
-      // Build the per-request context (parses the JWT -> ctx.user).
       context: async ({ req }) => buildContext({ req }),
     }),
   );
