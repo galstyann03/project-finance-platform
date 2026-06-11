@@ -8,7 +8,8 @@
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "pretest": "docker exec finance_mysql mysql -uroot -proot -e \"CREATE DATABASE IF NOT EXISTS finance_test;\" && dotenv -e .env.test -- npx prisma migrate deploy",
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules dotenv -e .env.test -- jest --runInBand"
   },
   "keywords": [
     "graphql",
@@ -22,10 +23,16 @@
   "author": "Narek Galstyan",
   "license": "ISC",
   "devDependencies": {
+    "@swc/core": "^1.15.41",
+    "@swc/jest": "^0.2.39",
     "@types/cors": "^2.8.19",
     "@types/express": "^4.17.25",
+    "@types/jest": "^30.0.0",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^25.9.2",
+    "cross-env": "^10.1.0",
+    "dotenv-cli": "^11.0.0",
+    "jest": "^30.4.2",
     "prisma": "^6.19.3",
     "tsx": "^4.22.4",
     "typescript": "^6.0.3"
